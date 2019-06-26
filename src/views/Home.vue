@@ -6,13 +6,7 @@
         <div class="container">
           <div class="msg-header">
               <div class="active">
-                  <h5># General</h5>
-              </div>
-
-              <div class="header-icons">
-                  <span class="float-right" @click="logoutUser">Logout <i class="fa fa-sign-out"></i>
-                  <i v-if="loggingOut" class="fa fa-spin fa-spinner"></i>
-                  </span>
+                  <h5>#General</h5>
               </div>
           </div>
 
@@ -21,15 +15,24 @@
                   <div class="chats" id="chats">
                       <div class="msg-page" id="msg-page">
 
-                        <div class="text-center img-fluid" v-if="!groupMessages.length" id="empty-chat">
+                        <div
+                          v-if="loadingMessages"
+                          class="loading-messages-container"
+                        >
+                          <spinner :size="100"/>
+                          <span class="loading-text">
+                            Loading Messages
+                          </span>
+                        </div>
+                        <div class="text-center img-fluid" v-else-if="!groupMessages.length" id="empty-chat">
                           <div class="empty-chat-holder">
                             <img src="../assets/illustration-empty-chat.svg" class="img-res" alt="empty chat image">
                           </div>
 
                           <div>
                             <h2> No new message? </h2>
-                            <h6>
-                              <center>Send your first message below.</center>
+                            <h6 class="empty-chat-sub-title">
+                              Send your first message below.
                             </h6>
                           </div>
                         </div>
@@ -65,15 +68,14 @@
               </div>
 
               <div class="msg-bottom">
-                <form v-on:submit.prevent="sendGroupMessage">
+                <form class="message-form" v-on:submit.prevent="sendGroupMessage">
                   <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Type something..." v-model="chatMessage">
-                      <div class="input-group-append">
-                          <span class="input-group-text" v-on:click="sendGroupMessage">
-                              <i class="fa fa-paper-plane fa-2x"></i>
-                              <i v-if="sendingMessage" class="fa fa-spin fa-spinner"></i>
-                          </span>
-                      </div>
+                    <input type="text" class="form-control message-input" placeholder="Type something" v-model="chatMessage" required>
+                    <spinner
+                      v-if="sendingMessage"
+                      class="sending-message-spinner"
+                      :size="30"
+                    />
                   </div>
                 </form>
               </div>
@@ -81,18 +83,20 @@
        </div>
       </div>
     </div>
-  </div>    
+  </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import { CometChat } from "@cometchat-pro/chat";
 import NavBar from "../components/NavBar.vue";
+import Spinner from "../components/Spinner.vue";
 
 export default {
   name: "home",
   components: {
-    NavBar
+    NavBar,
+    Spinner
   },
   data() {
     return {
@@ -101,12 +105,12 @@ export default {
       sendingMessage: false,
       chatMessage: "",
       loggingOut: false,
-      groupMessages: []
+      groupMessages: [],
+      loadingMessages: false
     };
   },
   mounted() {
-    let globalContext = this;
-
+    this.loadingMessages = true
     var listenerID = "UNIQUE_LISTENER_ID";
     CometChat.addMessageListener(
       listenerID,
@@ -114,11 +118,14 @@ export default {
         onTextMessageReceived: textMessage => {
           console.log("Text message received successfully", textMessage);
           // Handle text message
-          globalContext.groupMessages = [
-            ...globalContext.groupMessages,
+          this.groupMessages = [
+            ...this.groupMessages,
             textMessage
           ];
-          globalContext.scrollToBottom();
+          this.loadingMessages = false
+          this.$nextTick(() => {
+            this.scrollToBottom();
+          })
         }
       })
     );
@@ -145,27 +152,7 @@ export default {
 
     scrollToBottom() {
       const chat = document.getElementById("msg-page");
-      chat.scrollTop = chat.scrollHeight + 30 + "px";
-    },
-
-    logoutUser() {
-      this.loggingOut = true;
-      CometChat.logout().then(
-        success => {
-          console.log("Logout completed successfully");
-          this.$router.push({
-            name: "homepage"
-          });
-          this.loggingOut = false;
-          console.log(success);
-        },
-        error => {
-          //Logout failed with exception
-          console.log("Logout failed with exception:", {
-            error
-          });
-        }
-      );
+      chat.scrollTo(0, chat.scrollHeight + 30);
     },
 
     sendGroupMessage() {
@@ -190,6 +177,9 @@ export default {
           this.sendingMessage = false;
           // Text Message Sent Successfully
           this.groupMessages = [...globalContext.groupMessages, message];
+          this.$nextTick(() => {
+            this.scrollToBottom()
+          })
         },
         error => {
           console.log("Message sending failed with error:", error);
