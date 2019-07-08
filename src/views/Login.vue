@@ -5,7 +5,9 @@
             <div class="login-container">
                   <div class="login-form-container">
                       <form v-on:submit.prevent="authLoginUser">
-                          <h3>Welcome Back</h3>
+                          <h3>Welcome</h3>
+                          <p>Welcome to our little Vue demo. Login with the username "superhero1" or "superhero2" and test the chat out.
+                             To create your own user see <a href="https://prodocs.cometchat.com/reference#createuser">our documentation</a>   </p>
                           <div class="form-wrapper">
                               <label>Username</label>
                               <input type="text" name="username" id="username" v-model="username" placeholder="Enter your username" class="form-control" required>
