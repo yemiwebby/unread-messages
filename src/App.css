@@ -438,20 +438,6 @@ label {
   position: relative;
 }
 
-.logout-button {
-  margin-left: 15px;
-  cursor: pointer;
-  transition: 0.2s color;
-}
-
-.logout-button:hover {
-  color: #204CD2;
-}
-
-.logout-button .fa-sign-out {
-  margin-left: 2px;
-}
-
 .logo {
   margin-right: 7px;
 }
