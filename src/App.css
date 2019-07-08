@@ -198,7 +198,7 @@ label {
 }
 
 .active {
-  font-family: 'Roboto-Regular';
+  font-family: 'Roboto';
   width: 120px;
   float: left;
 }
@@ -268,7 +268,7 @@ label {
 }
 
 .received-msg-inbox p {
-  font-family: 'Roboto-Regular';
+  font-family: 'Roboto';
   background: #ffffff none repeat scroll 0 0;
   border-radius: 7px;
   color: #646464;
@@ -326,7 +326,7 @@ label {
 }
 
 .outgoing-chats-msg p {
-  font-family: 'Roboto-Regular';
+  font-family: 'Roboto';
   background: #1546dc none repeat scroll 0 0;
   color: #fff;
   font-size: 16px;
@@ -497,7 +497,7 @@ nav .spinner {
 }
 
 .loading-text {
-  font-family: 'Abril Fatface';
+  font-family: 'Roboto';
   color: #1546dc;
   font-size: 25px;
   margin-top: 20px;
