@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-bar :name="this.username" />
+    <nav-bar :name="this.username" :avatar="this.avatar" />
     <div id="home">
       <div class="wrapper">
         <div class="container">
@@ -41,7 +41,7 @@
                           <div v-for="message in groupMessages" v-bind:key="message.id">
                             <div class="received-chats" v-if="message.sender.uid != uid">
                                 <div class="received-chats-img">
-                                    <img src="../assets/profile-man.svg" alt="">
+                                  <img v-bind:src="message.sender.avatar" alt="" class="avatar">
                                 </div>
 
                                 <div class="received-msg">
@@ -58,7 +58,7 @@
                                   </div>
 
                                   <div class="outgoing-chats-img">
-                                      <img src="../assets/profile-lady.svg" alt="">
+                                      <img v-bind:src="message.sender.avatar" alt="" class="avatar">
                                   </div>
                               </div>
                           </div>
@@ -101,6 +101,7 @@ export default {
   data() {
     return {
       username: "",
+      avatar: "",
       uid: "",
       sendingMessage: false,
       chatMessage: "",
@@ -142,6 +143,7 @@ export default {
             ...this.groupMessages,
             textMessage
           ];
+          // console.log("avatar", textMessage.sender.avatar)
           this.loadingMessages = false
           this.$nextTick(() => {
             this.scrollToBottom();
@@ -159,6 +161,7 @@ export default {
       CometChat.getLoggedinUser().then(
         user => {
           this.username = user.name;
+          this.avatar = user.avatar;
           this.uid = user.uid;
         },
         error => {

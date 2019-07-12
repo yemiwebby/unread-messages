@@ -7,7 +7,7 @@
         </div>
         <div class="nav-right-section">
             <span class="welcome-message">Welcome <b>{{ name }}</b> </span>&nbsp;
-            <img src="../assets/profile-lady.svg">
+            <img v-bind:src="avatar" class="avatar">
         </div>
     </nav>
 </div>
@@ -15,6 +15,6 @@
 
 <script>
 export default {
-    props: ["name"]
+    props: ["name", "avatar"]
 };
 </script>
