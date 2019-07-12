@@ -94,7 +94,10 @@ flex: 1;
 #home {
   flex: 1;
   padding-top: 40px;
-  background: url(./assets/bg-chat.svg) no-repeat center center; 
+  background-color: #204CD2;
+  background-image: url(./assets/fixed-bg.svg);
+  background-repeat: no-repeat;
+  background-position:  center top; 
   background-size: cover;
   width: 100%; 
 
