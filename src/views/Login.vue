@@ -45,7 +45,7 @@ export default {
         () => {
           this.showSpinner = false;
           this.$router.push({
-            name: "home"
+            name: "chat"
           });
         },
         error => {
