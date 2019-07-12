@@ -126,6 +126,9 @@ export default {
             ...messages
           ];
           this.loadingMessages = false
+          this.$nextTick(() => {
+            this.scrollToBottom();
+          })
       },
       error => {
         console.log("Message fetching failed with error:", error);
