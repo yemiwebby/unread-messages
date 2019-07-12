@@ -1,8 +1,7 @@
 <template>
   <div class="booker">
     <nav-bar :name="this.username" :avatar="this.avatar" />
-    <div id="home">
-      <div class="wrapper">
+    <div class="chat">
         <div class="container">
           <div class="msg-header">
               <div class="active">
@@ -24,7 +23,7 @@
                             Loading Messages
                           </span>
                         </div>
-                        <div class="text-center img-fluid" v-else-if="!groupMessages.length" id="empty-chat">
+                        <div class="text-center img-fluid empty-chat" v-else-if="!groupMessages.length" >
                           <div class="empty-chat-holder">
                             <img src="../assets/empty-state.svg" class="img-res" alt="empty chat image">
                           </div>
@@ -80,7 +79,6 @@
                 </form>
               </div>
           </div>
-       </div>
       </div>
     </div>
   </div>

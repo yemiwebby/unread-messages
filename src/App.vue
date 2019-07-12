@@ -13,10 +13,11 @@ export default {
   created() {
     this.initializeApp();
   },
+
   methods: {
     initializeApp() {
-      var appID = process.env.VUE_APP_COMMETCHAT_APP_ID;
-      CometChat.init(appID).then(
+      const { VUE_APP_COMMETCHAT_APP_ID } = process.env
+      CometChat.init(VUE_APP_COMMETCHAT_APP_ID).then(
         () => {
           console.log("Initialization completed successfully");
         },
