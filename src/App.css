@@ -20,8 +20,8 @@ body {
 }
 
 .wrapper {
-  height: 100vh;
-  display: flex;
+  /* height: 100vh; */
+  /* display: flex; */
 }
 
 .inner {
@@ -87,12 +87,13 @@ button:hover {
 }
 
 #home {
+  flex: 1;
+  background: red;
+  padding-top: 40px;
   background: url(./assets/bg-chat.svg) no-repeat center center; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
   background-size: cover;
-  width: 100%;
+  width: 100%; 
+
 }
 
 nav {
@@ -173,11 +174,11 @@ label {
 }
 .container {
   margin: auto;
-  margin-top: 5%;
+  /* margin-top: 5%; */
   max-width: 800px;
   width: calc(100% - 20px);
   height: 588px;
-  margin-bottom: 50px;
+  /* margin-bottom: 50px; */
   font-family: sans-serif;
   letter-spacing: 0.5px;
   background: #f8f9fb;
@@ -551,3 +552,15 @@ nav .spinner {
   }
 }
 
+
+.booker {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+#app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

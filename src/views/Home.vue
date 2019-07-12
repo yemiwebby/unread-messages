@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="booker">
     <nav-bar :name="this.username" :avatar="this.avatar" />
     <div id="home">
       <div class="wrapper">
