@@ -18,7 +18,7 @@
 
                   <div class="login-image-container">
                       <div class="image-holder">
-                          <img src="../assets/illustration.svg" alt="">
+                          <img src="../assets/login-illustration.svg" alt="">
                       </div>
                   </div>
            </div>
