@@ -50,6 +50,7 @@ export default {
         },
         error => {
           this.showSpinner = false;
+          alert("Whops. Something went wrong. This commonly happens when you enter a username that doesn't exist. Check the console for more information")
           console.log("Login failed with error:", error.code);
         }
       );
