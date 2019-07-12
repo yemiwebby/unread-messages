@@ -20,8 +20,8 @@ body {
 }
 
 .wrapper {
-  height: 100vh;
-  display: flex;
+  /* height: 100vh; */
+  /* display: flex; */
 }
 
 .inner {
@@ -84,15 +84,23 @@ button:hover {
   -o-background-size: cover;
   background-size: cover;
   width: 100%;
+  padding-top: 100px;
+
+display: flex;
+flex-direction: column;
+flex: 1;
 }
 
 #home {
-  background: url(./assets/bg-chat.svg) no-repeat center center; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
+  flex: 1;
+  padding-top: 40px;
+  background-color: #204CD2;
+  background-image: url(./assets/fixed-bg.svg);
+  background-repeat: no-repeat;
+  background-position:  center top; 
   background-size: cover;
-  width: 100%;
+  width: 100%; 
+
 }
 
 nav {
@@ -166,13 +174,18 @@ label {
   width: 100%;
   height: 100%;
 }
+
+.avatar {
+  width: 37px;
+  height: 37px;
+}
 .container {
   margin: auto;
-  margin-top: 5%;
+  /* margin-top: 5%; */
   max-width: 800px;
   width: calc(100% - 20px);
   height: 588px;
-  margin-bottom: 50px;
+  /* margin-bottom: 50px; */
   font-family: sans-serif;
   letter-spacing: 0.5px;
   background: #f8f9fb;
@@ -198,7 +211,7 @@ label {
 }
 
 .active {
-  font-family: 'Roboto-Regular';
+  font-family: 'Roboto';
   width: 120px;
   float: left;
 }
@@ -268,7 +281,7 @@ label {
 }
 
 .received-msg-inbox p {
-  font-family: 'Roboto-Regular';
+  font-family: 'Roboto';
   background: #ffffff none repeat scroll 0 0;
   border-radius: 7px;
   color: #646464;
@@ -326,7 +339,7 @@ label {
 }
 
 .outgoing-chats-msg p {
-  font-family: 'Roboto-Regular';
+  font-family: 'Roboto';
   background: #1546dc none repeat scroll 0 0;
   color: #fff;
   font-size: 16px;
@@ -438,20 +451,6 @@ label {
   position: relative;
 }
 
-.logout-button {
-  margin-left: 15px;
-  cursor: pointer;
-  transition: 0.2s color;
-}
-
-.logout-button:hover {
-  color: #204CD2;
-}
-
-.logout-button .fa-sign-out {
-  margin-left: 2px;
-}
-
 .logo {
   margin-right: 7px;
 }
@@ -497,7 +496,7 @@ nav .spinner {
 }
 
 .loading-text {
-  font-family: 'Abril Fatface';
+  font-family: 'Roboto';
   color: #1546dc;
   font-size: 25px;
   margin-top: 20px;
@@ -558,4 +557,17 @@ nav .spinner {
   .welcome-message {
     display: none;
   }
+}
+
+
+.booker {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+#app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
