@@ -84,11 +84,15 @@ button:hover {
   -o-background-size: cover;
   background-size: cover;
   width: 100%;
+  padding-top: 100px;
+
+display: flex;
+flex-direction: column;
+flex: 1;
 }
 
 #home {
   flex: 1;
-  background: red;
   padding-top: 40px;
   background: url(./assets/bg-chat.svg) no-repeat center center; 
   background-size: cover;
