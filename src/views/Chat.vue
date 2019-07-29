@@ -5,7 +5,8 @@
         <div class="container">
           <div class="msg-header">
               <div class="active">
-                  <h5>#General</h5>
+                  <h5>#General <span class="fa fa-badge"><b>{{ unreadCount }}</b></span></h5>
+                   <span class="" @click="logoutUser">Logout</span>
               </div>
           </div>
 
@@ -56,6 +57,24 @@
                                       <p>{{ message.data.text }}</p>
                                   </div>
 
+                                  <div v-if="sent" style="color: green !important">
+                                    <span class="fa fa-check"></span>
+                                  </div>
+
+                                  <div v-else-if="delivered" style="color: green !important">
+                                    <span class="fa fa-check"></span>
+                                    <span class="fa fa-check"></span>
+                                  </div>
+
+                                  <div v-else-if="read" style="color: blue !important">
+                                    <span class="fa fa-check"></span>
+                                    <span class="fa fa-check"></span>
+                                  </div>
+
+                                  <div v-else>
+
+                                  </div>
+
                                   <div class="outgoing-chats-img">
                                       <img v-bind:src="message.sender.avatar" alt="" class="avatar">
                                   </div>
@@ -101,32 +120,34 @@ export default {
       username: "",
       avatar: "",
       uid: "",
+      messageId: "",
       sendingMessage: false,
       chatMessage: "",
       loggingOut: false,
       groupMessages: [],
-      loadingMessages: false
+      loadingMessages: false,
+      sent: false,
+      delivered: false,
+      read: false,
+      unreadCount: 0
     };
   },
   mounted() {
-    this.loadingMessages = true
+    this.loadingMessages = true;
     var listenerID = "UNIQUE_LISTENER_ID";
 
     const messagesRequest = new CometChat.MessagesRequestBuilder()
       .setLimit(100)
-      .build()
+      .build();
     messagesRequest.fetchPrevious().then(
       messages => {
         console.log("Message list fetched:", messages);
-          console.log("this.groupMessages", this.groupMessages)
-          this.groupMessages = [
-            ...this.groupMessages,
-            ...messages
-          ];
-          this.loadingMessages = false
-          this.$nextTick(() => {
-            this.scrollToBottom();
-          })
+        console.log("this.groupMessages", this.groupMessages);
+        this.groupMessages = [...this.groupMessages, ...messages];
+        this.loadingMessages = false;
+        this.$nextTick(() => {
+          this.scrollToBottom();
+        });
       },
       error => {
         console.log("Message fetching failed with error:", error);
@@ -139,16 +160,24 @@ export default {
         onTextMessageReceived: textMessage => {
           console.log("Text message received successfully", textMessage);
           // Handle text message
-          console.log(this.groupMessages)
-          this.groupMessages = [
-            ...this.groupMessages,
-            textMessage
-          ];
-          // console.log("avatar", textMessage.sender.avatar)
-          this.loadingMessages = false
+          console.log(this.groupMessages);
+          this.groupMessages = [...this.groupMessages, textMessage];
+          this.loadingMessages = false;
+
+          CometChat.markMessageAsRead(textMessage);
+          console.log("This was marked as read", textMessage);
+          this.unreadCount = this.unreadCount - 1;
           this.$nextTick(() => {
             this.scrollToBottom();
-          })
+          });
+        },
+        onMessageDelivered: messageReceipt => {
+          this.delivered = true;
+          console.log("MessageDelivered", { messageReceipt });
+        },
+        onMessageRead: messageReceipt => {
+          console.log("MessageRead", { messageReceipt });
+          this.read = true;
         }
       })
     );
@@ -201,12 +230,27 @@ export default {
           this.sendingMessage = false;
           // Text Message Sent Successfully
           this.groupMessages = [...globalContext.groupMessages, message];
+          this.sent = true;
+          // this.messageId = "";
+          this.unreadCount = this.unreadCount + 1;
           this.$nextTick(() => {
-            this.scrollToBottom()
-          })
+            this.scrollToBottom();
+          });
         },
         error => {
           console.log("Message sending failed with error:", error);
+        }
+      );
+    },
+    logoutUser() {
+      CometChat.logout().then(
+        success => {
+          console.log("Logout completed successfully");
+          this.$router.push({ name: "homepage" });
+          console.log(success);
+        },
+        error => {
+          console.log("Logout failed with exception:", { error });
         }
       );
     }
