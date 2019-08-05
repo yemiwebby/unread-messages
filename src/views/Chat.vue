@@ -49,7 +49,7 @@
                                         <p><span>{{ message.sender.uid }}</span><br>{{ message.data.text }}</p>
                                     </div>
                                 </div>
-                              </div>
+                            </div>
 
 
                             <div class="outgoing-chats" v-else>
@@ -57,22 +57,48 @@
                                       <p>{{ message.data.text }}</p>
                                   </div>
 
-                                  <div v-if="sent" style="color: green !important">
-                                    <span class="fa fa-check"></span>
+                                  <div v-if="sent && messageId == message.id" style="color: green !important;position: relative;">
+                                    <!-- <div v-if="sent && messageId == message.id" style="color: green !important;position: relative; top: 40px; right: 30px;"> -->
+                                     <div style="position: absolute; right: 0; bottom: 0;padding: 10px 10px 0 0;">
+                                       <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+width="23" height="23"
+viewBox="0 0 48 48"
+style=" fill:#000000;"><path fill="#43A047" d="M40.6 12.1L17 35.7 7.4 26.1 4.6 29 17 41.3 43.4 14.9z"></path></svg>
+                                    </div>
                                   </div>
 
-                                  <div v-else-if="delivered" style="color: green !important">
-                                    <span class="fa fa-check"></span>
-                                    <span class="fa fa-check"></span>
+                                  <div v-else-if="delivered && messageId == message.id" style="color: green !important; position: relative;">
+                                    <div style="position: absolute; right: 0; bottom: 0;padding: 10px 10px 0 0;">
+                                      <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+width="23" height="23"
+viewBox="0 0 226 226"
+style=" fill:#000000;"><g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><path d="M0,226v-226h226v226z" fill="none"></path><g fill="#2ecc71"><path d="M212.68483,42.375l-109.1015,109.90192l-43.17071,-43.98525l-13.32929,13.43758l56.5,57.18742l122.41667,-123.396z"></path><path d="M165.6015,42.375l-109.1015,109.90192l-43.17071,-43.98525l-13.32929,13.43758l56.5,57.18742l122.41667,-123.396z"></path></g></g></svg>
+                                      
+                                    </div>
                                   </div>
 
-                                  <div v-else-if="read" style="color: blue !important">
-                                    <span class="fa fa-check"></span>
-                                    <span class="fa fa-check"></span>
-                                  </div>
-
-                                  <div v-else>
-
+                                  <div v-else-if="read && messageId == message.id" style="color: blue !important; position: relative;">
+                                   <div style="position: absolute; right: 0; bottom: 0;padding: 10px 10px 0 0;">
+                                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="23" height="23" viewBox="0 0 226 226" style=" fill:#000000;">
+                                        <g fill="none" fill-rule="nonzero" stroke="none"
+                                         stroke-width="1" 
+                                         stroke-linecap="butt" 
+                                         stroke-linejoin="miter" 
+                                         stroke-miterlimit="10" 
+                                         stroke-dasharray="" 
+                                         stroke-dashoffset="0" 
+                                         font-family="none" 
+                                         font-weight="none" 
+                                         font-size="none" 
+                                         text-anchor="none" 
+                                         style="mix-blend-mode: normal">
+                                          <path d="M0,226v-226h226v226z" fill="none"></path>
+                                        <g>
+                                        <path d="M212.68483,42.375l-109.1015,109.90192l-43.17071,-43.98525l-13.32929,13.43758l56.5,57.18742l122.41667,-123.396z" fill="#0c9eff"></path>
+                                        <path d="M165.6015,42.375l-109.1015,109.90192l-43.17071,-43.98525l-13.32929,13.43758l56.5,57.18742l122.41667,-123.396z" fill="#06a3ff"></path>
+                                          </g>
+                                          </g>
+                                      </svg>
                                   </div>
 
                                   <div class="outgoing-chats-img">
@@ -166,18 +192,24 @@ export default {
 
           CometChat.markMessageAsRead(textMessage);
           console.log("This was marked as read", textMessage);
-          this.unreadCount = this.unreadCount - 1;
+
           this.$nextTick(() => {
             this.scrollToBottom();
           });
         },
         onMessageDelivered: messageReceipt => {
+          this.messageId = messageReceipt.messageId;
+          this.read = false;
           this.delivered = true;
+          this.sent = false;
           console.log("MessageDelivered", { messageReceipt });
         },
         onMessageRead: messageReceipt => {
           console.log("MessageRead", { messageReceipt });
+
           this.read = true;
+          this.delivered = false;
+          this.sent = false;
         }
       })
     );
@@ -185,6 +217,17 @@ export default {
 
   created() {
     this.getLoggedInUser();
+    let GUID = "supergroup";
+    CometChat.getUnreadMessageCountForGroup(GUID).then(
+      data => {
+        console.log("Message count fetched for unread", data);
+        console.log(data);
+        this.unreadCount = data.supergroup;
+      },
+      error => {
+        console.log("Error in getting message count", error);
+      }
+    );
   },
   methods: {
     getLoggedInUser() {
@@ -230,9 +273,13 @@ export default {
           this.sendingMessage = false;
           // Text Message Sent Successfully
           this.groupMessages = [...globalContext.groupMessages, message];
+
+          this.messageId = message.id;
+
+          this.read = false;
+          this.delivered = false;
           this.sent = true;
-          // this.messageId = "";
-          this.unreadCount = this.unreadCount + 1;
+
           this.$nextTick(() => {
             this.scrollToBottom();
           });
